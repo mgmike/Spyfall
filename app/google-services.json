@@ -1,0 +1,71 @@
+{
+  "project_info": {
+    "project_number": "592464546203",
+    "firebase_url": "https://spyfall-ee814.firebaseio.com",
+    "project_id": "spyfall-ee814",
+    "storage_bucket": "spyfall-ee814.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592464546203:android:74bfb83475114549",
+        "android_client_info": {
+          "package_name": "mike.spyfall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592464546203-92k1gj677blovem3e0u34a3oq3u7fjhj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mike.spyfall",
+            "certificate_hash": "5e0fbe69b3544b4f8d47cedc381d69e6e7a39ee6"
+          }
+        },
+        {
+          "client_id": "592464546203-kc7lt10nnfajm2i6dfu54ga9j2l6h9i9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mike.spyfall",
+            "certificate_hash": "c8d063a67cc90d8ad63715973ba582ef268b8782"
+          }
+        },
+        {
+          "client_id": "592464546203-nd6akb9t0jv53at9jvcluco6qtrn3h3v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mike.spyfall",
+            "certificate_hash": "4cab2943848b768d94e9e1662942eec3b4053ff7"
+          }
+        },
+        {
+          "client_id": "592464546203-1jdjk7ugnj96ib2e0n8rkulh47cu9amt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQFerJpLA__8q5nTyCiNAb6TV4z-gd2EI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592464546203-1jdjk7ugnj96ib2e0n8rkulh47cu9amt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_host_game"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="mike.spyfall.HostGameActivity"
+    android:background="@drawable/rainbackground">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <Button
+                    android:id="@+id/startGameButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_button_bg"
+                    android:maxWidth="100dp"
+                    android:onClick="onStartGame"
+                    android:text="Start Game" />
+
+                <Button
+                    android:id="@+id/leaveGameButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/startGameButton"
+                    android:layout_alignBottom="@+id/startGameButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_button_bg"
+                    android:maxWidth="100dp"
+                    android:onClick="onLeaveGame"
+                    android:text="Leave Game"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/addFriendButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/leaveGameButton"
+                    android:layout_alignBottom="@+id/leaveGameButton"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toEndOf="@+id/leaveGameButton"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_button_bg"
+                    android:maxWidth="100dp"
+                    android:onClick="onAddFriends"
+                    android:text="Add Friends"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/hideRoleButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/leaveGameButton"
+                    android:layout_alignBottom="@+id/leaveGameButton"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toEndOf="@+id/leaveGameButton"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_button_bg"
+                    android:maxWidth="100dp"
+                    android:onClick="onHideRole"
+                    android:text="Hide role"
+                    android:visibility="gone" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/roleText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:scrollbars="vertical"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/timeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif-monospace"
+                    android:text="08:00"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:textColorLink="@color/colorFriendListItemBackground"
+                    android:textSize="50sp"
+                    android:textStyle="normal|bold" />
+
+                <LinearLayout
+                    android:id="@+id/timeChange"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:paddingRight="25dp"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/addTimeButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/invisible"
+                        android:text="+"
+                        android:textColor="@color/black_overlay"
+                        android:textSize="40sp" />
+
+                    <Button
+                        android:id="@+id/reduceTimeButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/invisible"
+                        android:text="-"
+                        android:textColor="@color/black_overlay"
+                        android:textSize="40sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_weight="6"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_layout_bg"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Locations"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="normal|bold" />
+
+                <GridView
+                    android:id="@+id/locationList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:addStatesFromChildren="true"
+                    android:columnWidth="100dp"
+                    android:numColumns="2"
+                    android:paddingLeft="8px"
+                    android:paddingRight="8px"
+                    android:paddingTop="10dp"
+                    android:stretchMode="columnWidth" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_layout_bg"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Players"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Players"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="normal|bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/playersList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:addStatesFromChildren="true"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:paddingTop="10dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="11"
+            android:background="@drawable/my_layout_bg"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-7054487445717644/7414353818"></com.google.android.gms.ads.AdView>
+
+    </LinearLayout>
+
+</RelativeLayout>

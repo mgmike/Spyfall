@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="1"
+    android:background="@drawable/my_layout_bg"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
+
+    <ImageView
+        android:layout_width="85dp"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait"
+        android:id="@+id/friendImage"
+        android:layout_height="80dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.23">
+
+            <TextView
+                android:id="@+id/nameText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorWhite"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/userNameText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="3dp"
+                android:paddingTop="5dp"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.23"
+            android:textColor="@color/colorWhite" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:id="@+id/acceptButton"
+        android:background="@drawable/ic_accept"
+        android:visibility="gone"
+        android:layout_width="50dp" />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:id="@+id/declineButton"
+        android:background="@drawable/ic_decline"
+        android:visibility="gone"
+        android:layout_width="50dp" />
+
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:id="@+id/joinGameButton"
+        android:onClick="onJoinGame"
+        android:background="@color/invisible"
+        android:text="Join Game"
+        android:visibility="gone" />
+</LinearLayout>
