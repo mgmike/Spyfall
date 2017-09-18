@@ -11,7 +11,7 @@
     android:paddingTop="1dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/locationTextView"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:layout_weight="1"
