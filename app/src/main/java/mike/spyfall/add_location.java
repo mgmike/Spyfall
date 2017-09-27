@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridView;
@@ -39,14 +43,44 @@ public class add_location extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
+
     private String currentUserName;
     private String currentUID;
+
     private AdView mAdView;
     private GridView locationLayout;
     private GridView roleLayout;
     private EditText locationField;
     private ArrayList<Location> locationArrayList = new ArrayList<>();
-    private ArrayList<Location> roleArrayList = new ArrayList<>();
+    private ArrayList<NewRoleElement> roleArrayList = new ArrayList<>();
+
+    public void onAddLocation (View view){
+        boolean enoughRepeats = false;
+        if (!locationField.getText().equals("")) {
+            String location = String.valueOf(locationField.getText());
+            //checks if any check boxes have been checked
+            for (int i = 0; i < roleArrayList.size(); i++) {
+                if (roleArrayList.get(i).checkBoxValue()) {
+                    enoughRepeats = true;
+                }
+            }
+            if (enoughRepeats) {
+                int tempRepeats = 0;
+                int tempRoles = 0;
+                for (int j = 0; j < roleArrayList.size(); j++) {
+                    //if this role is repeatable it will go in the repeats catagory in custom locations
+                    if (roleArrayList.get(j).checkBoxValue()) {
+                        mRef.child("users/" + currentUID + "/customLocations/" + location + "/repeats/" + tempRepeats).setValue(roleArrayList.get(j).getRole());
+                    } else {
+                        mRef.child("users/" + currentUID + "/customLocations/" + location + "/roles/" + tempRepeats).setValue(roleArrayList.get(j).getRole());
+                    }
+                }
+                Toast.makeText(this, "Location has been added!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "You need a repeatable role.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +104,8 @@ public class add_location extends AppCompatActivity {
         locationField = (EditText) findViewById(R.id.editText);
         locationLayout = (GridView) findViewById(R.id.locationList);
         roleLayout = (GridView) findViewById(R.id.roleList);
-        mRef = FirebaseDatabase.getInstance().getReference("defaultLocations");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef = FirebaseDatabase.getInstance().getReference();
+        mRef.child("defaultLocations").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 locationArrayList.clear();
@@ -79,6 +113,7 @@ public class add_location extends AppCompatActivity {
                 for (DataSnapshot temp : dataSnapshot.getChildren()) {
                     Location tempLocation = new Location(temp.getKey());
                     locationArrayList.add(tempLocation);
+                    locationArrayList.get(i).setTextView((TextView) findViewById(R.id.locationTextView));
                     i++;
                 }
                 locationLayout.setAdapter(new Adapter(add_location.this));
@@ -96,12 +131,19 @@ public class add_location extends AppCompatActivity {
             }
         });
 
-        roleArrayList.add(new Location(""));
-        //roleLayout.setAdapter(new RoleAdapter(add_location.this));
-        roleLayout.setAdapter(new ArrayAdapter<Location>(this,R.layout.role_template, roleArrayList));
-
-        mRef = FirebaseDatabase.getInstance().getReference();
-
+        roleArrayList.add(new NewRoleElement());
+        roleLayout.setAdapter(new RoleAdapter(add_location.this));
+        /*
+        roleLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(roleArrayList.get(position).getRole() + "********************");
+                if (roleArrayList.get(position).getRole().equals("")){
+                    roleArrayList.add(new NewRoleElement());
+                }
+            }
+        });
+*/
 
     }
 
@@ -142,7 +184,6 @@ public class add_location extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
             LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             if (convertView == null) {
@@ -150,14 +191,49 @@ public class add_location extends AppCompatActivity {
             }
 
             //if (!locationArrayList.get(position).checkTextView()) {
-            System.out.println(position);
-            locationArrayList.get(position).setTextView((TextView) convertView.findViewById(R.id.textView));
+            //System.out.println(position);
+            locationArrayList.get(position).setTextView((TextView) convertView.findViewById(R.id.locationTextView));
             locationArrayList.get(position).updateText();
-            locationArrayList.get(position).getButton().setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
+            locationArrayList.get(position).getButton().setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             //} else {
             // locationArrayList.get(position).setAlpha();
             //}
+            return convertView;
+        }
+    }
 
+    public class RoleAdapter extends BaseAdapter{
+        Context c;
+
+        public RoleAdapter(Context context) {
+            this.c = context;
+        }
+
+        @Override
+        public int getCount() {
+            return roleArrayList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return roleArrayList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return roleArrayList.indexOf(position);
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.role_template, null);
+
+            }
+            roleArrayList.get(position).setRoleInput((EditText) convertView.findViewById(R.id.roleText));
+            roleArrayList.get(position).setRepeatCheckBox((CheckBox) convertView.findViewById(R.id.checkBox));
             return convertView;
         }
     }

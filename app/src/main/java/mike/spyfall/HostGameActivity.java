@@ -820,7 +820,7 @@ public class HostGameActivity extends AppCompatActivity {
 
             //if (!locationArrayList.get(position).checkTextView()) {
                 System.out.println(position);
-                locationArrayList.get(position).setTextView((TextView) convertView.findViewById(R.id.textView));
+                locationArrayList.get(position).setTextView((TextView) convertView.findViewById(R.id.locationTextView));
                 locationArrayList.get(position).updateText();
                 locationArrayList.get(position).setAlpha();
                 locationArrayList.get(position).getButton().setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
