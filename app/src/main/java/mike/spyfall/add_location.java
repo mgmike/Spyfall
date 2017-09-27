@@ -293,6 +293,7 @@ public class add_location extends AppCompatActivity {
                 roleArrayList.get(position).setRepeatCheckBox((CheckBox) convertView.findViewById(R.id.checkBox));
             } else {
                 roleArrayList.get(position).updateViews();
+                roleLayout.invalidateViews();
             }
             return convertView;
         }

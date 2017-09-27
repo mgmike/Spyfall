@@ -27,8 +27,6 @@ public class NewRoleElement {
             //} else if(repeatCheckBox != null){
         }
             repeatCheckBox.setChecked(check);
-
-        System.out.println(role + roleInput.getText().toString());
     }
 
     public void setText(String text){
