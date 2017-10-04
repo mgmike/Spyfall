@@ -2,6 +2,8 @@ package mike.spyfall;
 
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by Michael on 7/23/2017.
  */
@@ -10,6 +12,8 @@ public class Location {
     private TextView textView;
     private String itemLocation;
     private boolean buttonClicked = false;
+    private ArrayList<String> roles = new ArrayList<>();
+    private ArrayList<String> repeats = new ArrayList<>();
 
     public Location (String itemLocation){
         this.itemLocation = itemLocation;
@@ -48,6 +52,22 @@ public class Location {
 
     public boolean getAlpha(){
         return buttonClicked;
+    }
+
+    public void addRole(String r){
+        roles.add(r);
+    }
+
+    public ArrayList<String> getRoleList(){
+        return roles;
+    }
+
+    public void addRepeat(String r){
+        repeats.add(r);
+    }
+
+    public ArrayList<String> getRepeatList(){
+        return repeats;
     }
 
     public void reset(){

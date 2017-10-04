@@ -70,9 +70,9 @@ public class add_location extends AppCompatActivity {
                 for (int j = 0; j < roleArrayList.size(); j++) {
                     //if this role is repeatable it will go in the repeats catagory in custom locations
                     if (roleArrayList.get(j).checkBoxValue()) {
-                        mRef.child("users/" + currentUID + "/customLocations/" + location + "/repeats/" + tempRepeats).setValue(roleArrayList.get(j).getRole());
+                        mRef.child("users/" + currentUID + "/customLocations/added/" + location + "/repeats/" + tempRepeats).setValue(roleArrayList.get(j).getRole());
                     } else {
-                        mRef.child("users/" + currentUID + "/customLocations/" + location + "/roles/" + tempRepeats).setValue(roleArrayList.get(j).getRole());
+                        mRef.child("users/" + currentUID + "/customLocations/deleted" + location + "/roles/" + tempRepeats).setValue(roleArrayList.get(j).getRole());
                     }
                 }
                 Toast.makeText(this, "Location has been added!", Toast.LENGTH_SHORT).show();
@@ -80,6 +80,13 @@ public class add_location extends AppCompatActivity {
                 Toast.makeText(this, "You need a repeatable role.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void onTest (View view){
+        for (int i = 0; i < roleArrayList.size(); i++){
+            roleArrayList.get(i).setText(roleArrayList.get(i).getRoleInput().getText().toString());
+        }
+        roleLayout.invalidateViews();
     }
 
     @Override
@@ -114,6 +121,13 @@ public class add_location extends AppCompatActivity {
                     Location tempLocation = new Location(temp.getKey());
                     locationArrayList.add(tempLocation);
                     locationArrayList.get(i).setTextView((TextView) findViewById(R.id.locationTextView));
+                    for (DataSnapshot tempRole : dataSnapshot.child(temp.getKey()).child("roles").getChildren()) {
+                        locationArrayList.get(i).addRole(tempRole.getValue().toString());
+                    }
+
+                    for (DataSnapshot tempRole : dataSnapshot.child(temp.getKey()).child("repeats").getChildren()) {
+                        locationArrayList.get(i).addRepeat(tempRole.getValue().toString());
+                    }
                     i++;
                 }
                 locationLayout.setAdapter(new Adapter(add_location.this));
@@ -121,6 +135,24 @@ public class add_location extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                         Toast.makeText(add_location.this, locationArrayList.get(position).getItemLocation(), Toast.LENGTH_SHORT).show();
+                        roleArrayList.clear();
+                        ArrayList<String> tempRoles = locationArrayList.get(position).getRoleList();
+                        ArrayList<String> tempRepeats = locationArrayList.get(position).getRepeatList();
+                        for (int i = 0; i < tempRoles.size(); i++){
+                            roleArrayList.add(new NewRoleElement(tempRoles.get(i), false));
+                            roleArrayList.get(i).setRoleInput((EditText) findViewById(R.id.roleText));
+                            roleArrayList.get(i).setRepeatCheckBox((CheckBox) findViewById(R.id.checkBox));
+                            roleArrayList.get(i).setText(tempRoles.get(i));
+                            System.out.println(tempRoles.get(i));
+                        }
+                        for (int i = 0; i < tempRepeats.size(); i++){
+                            roleArrayList.add(new NewRoleElement(tempRepeats.get(i), true));
+                            roleArrayList.get(i).setRoleInput((EditText) findViewById(R.id.roleText));
+                            roleArrayList.get(i).setRepeatCheckBox((CheckBox) findViewById(R.id.checkBox));
+                            roleArrayList.get(i).updateViews();
+                            System.out.println(tempRepeats.get(i));
+                        }
+                        roleLayout.invalidateViews();
                     }
                 });
             }
@@ -134,16 +166,39 @@ public class add_location extends AppCompatActivity {
         roleArrayList.add(new NewRoleElement());
         roleLayout.setAdapter(new RoleAdapter(add_location.this));
         /*
-        roleLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        roleLayout.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println(roleArrayList.get(position).getRole() + "********************");
                 if (roleArrayList.get(position).getRole().equals("")){
                     roleArrayList.add(new NewRoleElement());
                 }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-*/
+        */
+
+        roleLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(roleArrayList.get(position).getRole() + "************************************************************************************");
+                if(roleArrayList.get(position).getRole().equals("")) {
+                    if (roleArrayList.size() == 1 ) {
+                        roleArrayList.add(new NewRoleElement());
+                    } else {
+                        if (!roleArrayList.get(roleArrayList.size() - 1).getRole().equals("")) {
+                            roleArrayList.add(new NewRoleElement());
+                        }
+                    }
+                }
+            }
+        });
+
 
     }
 
@@ -232,8 +287,14 @@ public class add_location extends AppCompatActivity {
                 convertView = inflater.inflate(R.layout.role_template, null);
 
             }
-            roleArrayList.get(position).setRoleInput((EditText) convertView.findViewById(R.id.roleText));
-            roleArrayList.get(position).setRepeatCheckBox((CheckBox) convertView.findViewById(R.id.checkBox));
+            if (roleArrayList.get(position).getRoleInput() == null) {
+                roleArrayList.get(position).setRoleInput((EditText) convertView.findViewById(R.id.roleText));
+            } else if (roleArrayList.get(position).getRepeatCheckBox() == null) {
+                roleArrayList.get(position).setRepeatCheckBox((CheckBox) convertView.findViewById(R.id.checkBox));
+            } else {
+                roleArrayList.get(position).updateViews();
+                roleLayout.invalidateViews();
+            }
             return convertView;
         }
     }

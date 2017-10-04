@@ -11,8 +11,22 @@ public class NewRoleElement {
     private EditText roleInput;
     private CheckBox repeatCheckBox;
     private String role; // not sure if im gonna need this
+    private boolean check = false;
 
     public NewRoleElement(){
+    }
+
+    public NewRoleElement(String role, boolean isRepeat){
+        this.role = role;
+        this.check = isRepeat;
+    }
+
+    public void updateViews(){
+        if (roleInput != null) {
+            roleInput.setText(this.role);
+            //} else if(repeatCheckBox != null){
+        }
+            repeatCheckBox.setChecked(check);
     }
 
     public void setText(String text){
