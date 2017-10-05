@@ -499,7 +499,7 @@ public class HostGameActivity extends AppCompatActivity {
                             }
                         }
                     });
-                } else {
+                } else { //if you are in mid game
                     startGameButton.setVisibility(View.VISIBLE);
                     startGameButton.setText("End Game");
                     leaveGameButton.setVisibility(View.GONE);

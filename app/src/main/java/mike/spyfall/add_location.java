@@ -49,7 +49,7 @@ public class add_location extends AppCompatActivity {
 
     private AdView mAdView;
     private GridView locationLayout;
-    private GridView roleLayout;
+    private RecyclerView roleLayout;
     private EditText locationField;
     private ArrayList<Location> locationArrayList = new ArrayList<>();
     private ArrayList<NewRoleElement> roleArrayList = new ArrayList<>();
@@ -86,7 +86,6 @@ public class add_location extends AppCompatActivity {
         for (int i = 0; i < roleArrayList.size(); i++){
             roleArrayList.get(i).setText(roleArrayList.get(i).getRoleInput().getText().toString());
         }
-        roleLayout.invalidateViews();
     }
 
     @Override
@@ -110,7 +109,7 @@ public class add_location extends AppCompatActivity {
 
         locationField = (EditText) findViewById(R.id.editText);
         locationLayout = (GridView) findViewById(R.id.locationList);
-        roleLayout = (GridView) findViewById(R.id.roleList);
+        roleLayout = (RecyclerView) findViewById(R.id.roleList);
         mRef = FirebaseDatabase.getInstance().getReference();
         mRef.child("defaultLocations").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -138,6 +137,7 @@ public class add_location extends AppCompatActivity {
                         roleArrayList.clear();
                         ArrayList<String> tempRoles = locationArrayList.get(position).getRoleList();
                         ArrayList<String> tempRepeats = locationArrayList.get(position).getRepeatList();
+                        //for every role in temproles in the database, a new role object will be created.
                         for (int i = 0; i < tempRoles.size(); i++){
                             roleArrayList.add(new NewRoleElement(tempRoles.get(i), false));
                             roleArrayList.get(i).setRoleInput((EditText) findViewById(R.id.roleText));
@@ -152,7 +152,6 @@ public class add_location extends AppCompatActivity {
                             roleArrayList.get(i).updateViews();
                             System.out.println(tempRepeats.get(i));
                         }
-                        roleLayout.invalidateViews();
                     }
                 });
             }
@@ -164,7 +163,7 @@ public class add_location extends AppCompatActivity {
         });
 
         roleArrayList.add(new NewRoleElement());
-        roleLayout.setAdapter(new RoleAdapter(add_location.this));
+        //roleLayout.setAdapter(new RoleAdapter(add_location.this));
         /*
         roleLayout.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -181,7 +180,7 @@ public class add_location extends AppCompatActivity {
 
             }
         });
-        */
+
 
         roleLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -198,7 +197,7 @@ public class add_location extends AppCompatActivity {
                 }
             }
         });
-
+        */
 
     }
 
@@ -293,22 +292,47 @@ public class add_location extends AppCompatActivity {
                 roleArrayList.get(position).setRepeatCheckBox((CheckBox) convertView.findViewById(R.id.checkBox));
             } else {
                 roleArrayList.get(position).updateViews();
-                roleLayout.invalidateViews();
             }
             return convertView;
         }
     }
 
-    public static class RoleViewHolder extends RecyclerView.ViewHolder {
+    public class RoleRecyclerAdapter extends RecyclerView.Adapter{
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.role_template, parent);
+            //LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            return new RoleViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return roleArrayList.size();
+        }
+    }
+
+    public class RoleViewHolder extends RecyclerView.ViewHolder {
         View mView;
+        private EditText roleInput;
+        private CheckBox repeatCheckBox;
+
         public RoleViewHolder(View view){
             super(view);
             this.mView = view;
+            roleInput = (EditText) view.findViewById(R.id.roleText);
+            repeatCheckBox = (CheckBox) view.findViewById(R.id.checkBox);
         }
 
-        public View getmView(){return mView;}
-
-
+        public void updateViews(int position){
+            roleInput.setText(roleArrayList.get(position).getRole());
+            repeatCheckBox.setChecked(roleArrayList.get(position).checkBoxValue());
+        }
     }
 
 }
