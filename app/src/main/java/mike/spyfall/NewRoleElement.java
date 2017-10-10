@@ -38,6 +38,9 @@ public class NewRoleElement {
     }
 
     public String getRole(){
+        if (roleInput.getText() == null){
+            return "Enter a role.";
+        }
         return String.valueOf(roleInput.getText());
     }
 

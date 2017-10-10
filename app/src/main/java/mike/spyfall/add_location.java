@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,7 +38,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.android.gms.ads.MobileAds;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class add_location extends AppCompatActivity {
 
@@ -85,7 +88,7 @@ public class add_location extends AppCompatActivity {
 
     public void onTest (View view){
         for (int i = 0; i < roleArrayList.size(); i++){
-            roleArrayList.get(i).setText(roleArrayList.get(i).getRoleInput().getText().toString());
+            //roleArrayList.get(i).setText(roleArrayList.get(i).getRoleInput().getText().toString());
         }
     }
 
@@ -111,7 +114,9 @@ public class add_location extends AppCompatActivity {
         locationField = (EditText) findViewById(R.id.editText);
         locationLayout = (GridView) findViewById(R.id.locationList);
         roleLayout = (RecyclerView) findViewById(R.id.roleList);
-        roleRecyclerAdapter = new RoleRecyclerAdapter();
+        roleRecyclerAdapter = new RoleRecyclerAdapter(roleArrayList, this);
+        roleLayout.setHasFixedSize(true);
+        roleLayout.setLayoutManager(new LinearLayoutManager(this));
         roleLayout.setAdapter(roleRecyclerAdapter);
 
         roleArrayList.add(new NewRoleElement());
@@ -307,16 +312,33 @@ public class add_location extends AppCompatActivity {
 
     public class RoleRecyclerAdapter extends RecyclerView.Adapter<RoleRecyclerAdapter.RoleViewHolder>{
 
+        private ArrayList<NewRoleElement> roleElements;
+        private Context context;
+
+        public RoleRecyclerAdapter(ArrayList<NewRoleElement> roleElements, Context context){
+            this.roleElements = roleElements;
+            this.context = context;
+        }
+
         @Override
         public RoleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.role_template, parent);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.role_template, parent, false);
             //LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             return new RoleViewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(RoleViewHolder holder, int position) {
-            holder.updateViews(position);
+            if(!roleArrayList.get(position).getRole().equals(null)) {
+                if (!roleArrayList.get(position).getRepeatCheckBox().equals(null)){
+                    holder.setText(roleArrayList.get(position).getRole());
+                    holder.checked(roleArrayList.get(position).checkBoxValue());
+                } else {
+                    holder.checked(false);
+                }
+            } else {
+               holder.setText("Enter a role.");
+            }
         }
 
         @Override
@@ -336,18 +358,14 @@ public class add_location extends AppCompatActivity {
                 repeatCheckBox = (CheckBox) view.findViewById(R.id.checkBox);
             }
 
-            public void updateViews(int position){
-                if(!roleArrayList.get(position).getRole().equals(null)) {
-                    if (!roleArrayList.get(position).getRepeatCheckBox().equals(null)){
-                        roleInput.setText(roleArrayList.get(position).getRole());
-                        repeatCheckBox.setChecked(roleArrayList.get(position).checkBoxValue());
-                    } else {
-                        repeatCheckBox.setChecked(false);
-                    }
-                } else {
-                    roleInput.setText("Enter a role.");
-                }
+            public void setText(String role){
+                roleInput.setText(role);
             }
+
+            public void checked(Boolean clicked){
+                repeatCheckBox.setChecked(clicked);
+            }
+
         }
     }
 
