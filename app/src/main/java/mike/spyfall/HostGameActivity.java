@@ -223,13 +223,13 @@ public class HostGameActivity extends AppCompatActivity {
                                     } else {
                                         for (int j = 0; j < rolesCount; j++) {
                                             roleList.add(dataSnapshot.child("roles").child(Integer.toString(j)).getValue().toString());
-                                            System.out.println(roleList.get(j));
+                                            //System.out.println(roleList.get(j));
                                         }
                                         int playersLeft = playerCount - rolesCount - 1;
                                         int repeatCount = (int) dataSnapshot.child("repeats").getChildrenCount();
                                         for(int k = 0; k < playersLeft; k++){
                                             roleList.add(dataSnapshot.child("repeats").child(Integer.toString((playersLeft - k) % repeatCount)).getValue().toString());
-                                            System.out.println(roleList.get(rolesCount + k));
+                                            //System.out.println(roleList.get(rolesCount + k));
                                         }
                                         roleList.add("Spy");
                                     }
@@ -242,7 +242,7 @@ public class HostGameActivity extends AppCompatActivity {
                                             tempSub = randomNumber.nextInt(playerCount);
                                         }
                                         playerList[tempSub][1] = roleList.get(k);
-                                        System.out.println(playerList[tempSub][1]);
+                                        //System.out.println(playerList[tempSub][1]);
                                     }
 
                                     //updates the database
@@ -253,6 +253,11 @@ public class HostGameActivity extends AppCompatActivity {
                                     displayRole();
                                     //sets up timer and updates database
                                     long rightNow = Calendar.getInstance().getTimeInMillis();
+                                    String endTime = "";
+                                    endTime = String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) + ":";
+                                    endTime += String.valueOf(Calendar.getInstance().get(Calendar.MONTH)) + ":";
+                                    endTime += String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) + ":";
+                                    endTime += String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) + ":";
                                     mRef = FirebaseDatabase.getInstance().getReference("users/" + currentUID + "/currentGame");
                                     mRef.child("users").child(currentUserName).child("time").setValue(Long.toString(rightNow));
                                     mRef.child("location").setValue(location);
@@ -590,7 +595,7 @@ public class HostGameActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             //find UID
                             if(dataSnapshot.child(tempUserName).exists()) {
-                                System.out.println(dataSnapshot.child(tempUserName).getValue() + "===========================================");
+                                //System.out.println(dataSnapshot.child(tempUserName).getValue() + "===========================================");
                                 final String tempUID = dataSnapshot.child(tempUserName).getValue().toString();
 
                                 //find name
@@ -819,7 +824,7 @@ public class HostGameActivity extends AppCompatActivity {
             }
 
             //if (!locationArrayList.get(position).checkTextView()) {
-                System.out.println(position);
+                //System.out.println(position);
                 locationArrayList.get(position).setTextView((TextView) convertView.findViewById(R.id.locationTextView));
                 locationArrayList.get(position).updateText();
                 locationArrayList.get(position).setAlpha();
