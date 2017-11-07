@@ -252,18 +252,14 @@ public class HostGameActivity extends AppCompatActivity {
                                     }
                                     displayRole();
                                     //sets up timer and updates database
-                                    long rightNow = Calendar.getInstance().getTimeInMillis();
-                                    String endTime = "";
-                                    endTime = String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) + ":";
-                                    endTime += String.valueOf(Calendar.getInstance().get(Calendar.MONTH)) + ":";
-                                    endTime += String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) + ":";
-                                    endTime += String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) + ":";
+                                    long currentTime = Calendar.getInstance().getTimeInMillis();
+                                    long endTime = currentTime + startTime;
                                     mRef = FirebaseDatabase.getInstance().getReference("users/" + currentUID + "/currentGame");
-                                    mRef.child("users").child(currentUserName).child("time").setValue(Long.toString(rightNow));
+                                    mRef.child("endTime").setValue(endTime);
                                     mRef.child("location").setValue(location);
                                     timer = new CounterClass(startTime, 1000);
                                     timer.start();
-                                    System.out.println(rightNow);
+                                    System.out.println(currentTime);
                                 }
 
                                 @Override
@@ -300,6 +296,7 @@ public class HostGameActivity extends AppCompatActivity {
                     timeChange.setVisibility(View.GONE);
                     roleText.setText("Pres 'Start Game' to begin!");
                     mRef = FirebaseDatabase.getInstance().getReference("users/" + currentUID + "/currentGame");
+                    mRef.child("endGame").removeValue();
                     mRef.child("location").setValue("none");
                     mRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -517,13 +514,13 @@ public class HostGameActivity extends AppCompatActivity {
                     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            long rightNow = Calendar.getInstance().getTimeInMillis();
+                            long currentTime = Calendar.getInstance().getTimeInMillis();
                             if(dataSnapshot.child("startTime").exists()){
                                 startTime = Integer.parseInt(dataSnapshot.child("startTime").getValue().toString());
                             } else {
                                 startTime = 480000;
                             }
-                            long timeLeft = startTime - (rightNow - Long.parseLong(dataSnapshot.child("users").child(currentUserName).child("time").getValue().toString()));
+                            long timeLeft = (Long.parseLong(dataSnapshot.child("endTime").getValue().toString()) - currentTime);
                             if(timeLeft > 0 && timeLeft < startTime){
                                 timer = new CounterClass(timeLeft, 1000);
                                 timer.start();

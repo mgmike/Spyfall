@@ -319,19 +319,17 @@ public class GuestGameActivity extends HostGameActivity{
                                         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                                long rightNow = Calendar.getInstance().getTimeInMillis();
+                                                long currentTime = Calendar.getInstance().getTimeInMillis();
                                                 if (dataSnapshot.child("startTime").exists()) {
                                                     startTime = Integer.parseInt(dataSnapshot.child("startTime").getValue().toString());
                                                 }
-                                                if (dataSnapshot.child("users").child(currentUserName).child("time").exists()) {
-                                                    long timeLeft = startTime - (rightNow - Long.parseLong(dataSnapshot.child("time").getValue().toString()));
+                                                if (dataSnapshot.child("endTime").exists()) {
+                                                    long timeLeft = (Long.parseLong(dataSnapshot.child("endTime").getValue().toString()) - currentTime);
                                                     if (timeLeft > 0 && timeLeft < startTime) {
                                                         timer = new CounterClass(timeLeft, 1000);
                                                         timer.start();
                                                     }
                                                 } else {
-                                                    mRef = FirebaseDatabase.getInstance().getReference("users/" + hostUID + "/currentGame/users/" + currentUserName);
-                                                    mRef.child("time").setValue(rightNow);
                                                     timer = new CounterClass(startTime - 1000, 1000);
                                                     timer.start();
                                                 }
