@@ -52,13 +52,6 @@
                         android:inputType="textPersonName" />
 
                     <Button
-                        android:id="@+id/testButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:onClick="onTest" />
-
-                    <Button
                         android:id="@+id/addButton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

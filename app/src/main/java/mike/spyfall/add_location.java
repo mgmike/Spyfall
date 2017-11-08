@@ -74,9 +74,9 @@ public class add_location extends AppCompatActivity {
                 for (int j = 0; j < roleArrayList.size(); j++) {
                     //if this role is repeatable it will go in the repeats catagory in custom locations
                     if (roleArrayList.get(j).checkBoxValue()) {
-                        mRef.child("users/" + currentUID + "/customLocations/added/" + location + "/repeats/" + tempRepeats).setValue(roleArrayList.get(j).getRole());
+                        mRef.child("users/" + currentUID + "/customLocations/added/" + location + "/repeats/" + j).setValue(roleArrayList.get(j).getRole());
                     } else {
-                        mRef.child("users/" + currentUID + "/customLocations/deleted" + location + "/roles/" + tempRepeats).setValue(roleArrayList.get(j).getRole());
+                        mRef.child("users/" + currentUID + "/customLocations/added/" + location + "/roles/" + j).setValue(roleArrayList.get(j).getRole());
                     }
                 }
                 Toast.makeText(this, "Location has been added!", Toast.LENGTH_SHORT).show();
@@ -86,11 +86,6 @@ public class add_location extends AppCompatActivity {
         }
     }
 
-    public void onTest (View view){
-        for (int i = 0; i < roleArrayList.size(); i++){
-            //roleArrayList.get(i).setText(roleArrayList.get(i).getRoleInput().getText().toString());
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +115,7 @@ public class add_location extends AppCompatActivity {
         roleLayout.setAdapter(roleRecyclerAdapter);
 
         roleArrayList.add(new NewRoleElement());
-        roleRecyclerAdapter.notifyItemInserted(roleArrayList.size() - 1);
+        //roleRecyclerAdapter.notifyItemInserted(roleArrayList.size() - 1);
 
         mRef = FirebaseDatabase.getInstance().getReference();
         mRef.child("defaultLocations").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -141,31 +136,40 @@ public class add_location extends AppCompatActivity {
                     }
                     i++;
                 }
+                locationArrayList.add(0, new Location("New location"));
                 locationLayout.setAdapter(new Adapter(add_location.this));
                 locationLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                         Toast.makeText(add_location.this, locationArrayList.get(position).getItemLocation(), Toast.LENGTH_SHORT).show();
-                        roleArrayList.clear();
-                        ArrayList<String> tempRoles = locationArrayList.get(position).getRoleList();
-                        ArrayList<String> tempRepeats = locationArrayList.get(position).getRepeatList();
-                        //for every role in temproles in the database, a new role object will be created.
-                        for (int i = 0; i < tempRoles.size(); i++){
-                            roleArrayList.add(new NewRoleElement(tempRoles.get(i), false));
-                            //roleArrayList.get(i).setRoleInput((EditText) findViewById(R.id.roleText));
-                            //roleArrayList.get(i).setRepeatCheckBox((CheckBox) findViewById(R.id.checkBox));
-                            //roleArrayList.get(i).setText(tempRoles.get(i));
-                            System.out.println(tempRoles.get(i));
-                            roleRecyclerAdapter.notifyItemInserted(roleArrayList.size() - 1);
+                        if (position == 0){
+                            locationField.setText("");
+                            roleArrayList.clear();
+                            roleArrayList.add(new NewRoleElement("", false));
+                            roleRecyclerAdapter.notifyDataSetChanged();
+                        } else {
+                            locationField.setText(locationArrayList.get(position).getText());
+                            roleArrayList.clear();
+                            ArrayList<String> tempRoles = locationArrayList.get(position).getRoleList();
+                            ArrayList<String> tempRepeats = locationArrayList.get(position).getRepeatList();
+                            //for every role in temproles in the database, a new role object will be created.
+                            for (int i = 0; i < tempRoles.size(); i++) {
+                                roleArrayList.add(new NewRoleElement(tempRoles.get(i), false));
+                                //roleArrayList.get(i).setRoleInput((EditText) findViewById(R.id.roleText));
+                                //roleArrayList.get(i).setRepeatCheckBox((CheckBox) findViewById(R.id.checkBox));
+                                //roleArrayList.get(i).setText(tempRoles.get(i));
+                                System.out.println(tempRoles.get(i));
+                                roleRecyclerAdapter.notifyDataSetChanged();
 
-                        }
-                        for (int i = 0; i < tempRepeats.size(); i++){
-                            roleArrayList.add(new NewRoleElement(tempRepeats.get(i), true));
-                            //roleArrayList.get(i).setRoleInput((EditText) findViewById(R.id.roleText));
-                            //roleArrayList.get(i).setRepeatCheckBox((CheckBox) findViewById(R.id.checkBox));
-                            //roleArrayList.get(i).updateViews();
-                            System.out.println(tempRepeats.get(i));
-                            roleRecyclerAdapter.notifyItemInserted(roleArrayList.size() - 1);
+                            }
+                            for (int i = 0; i < tempRepeats.size(); i++) {
+                                roleArrayList.add(new NewRoleElement(tempRepeats.get(i), true));
+                                //roleArrayList.get(i).setRoleInput((EditText) findViewById(R.id.roleText));
+                                //roleArrayList.get(i).setRepeatCheckBox((CheckBox) findViewById(R.id.checkBox));
+                                //roleArrayList.get(i).updateViews();
+                                System.out.println(tempRepeats.get(i));
+                                roleRecyclerAdapter.notifyDataSetChanged();
+                            }
                         }
                     }
                 });
@@ -177,7 +181,7 @@ public class add_location extends AppCompatActivity {
             }
         });
         //roleLayout.setAdapter(new RoleAdapter(add_location.this));
-        /*
+    /*
         roleLayout.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -210,7 +214,7 @@ public class add_location extends AppCompatActivity {
                 }
             }
         });
-        */
+*/
 
     }
 
@@ -269,6 +273,7 @@ public class add_location extends AppCompatActivity {
         }
     }
 
+    /*
     public class RoleAdapter extends BaseAdapter{
         Context c;
 
@@ -309,13 +314,15 @@ public class add_location extends AppCompatActivity {
             return convertView;
         }
     }
+    */
 
     public class RoleRecyclerAdapter extends RecyclerView.Adapter<RoleRecyclerAdapter.RoleViewHolder>{
 
         private ArrayList<NewRoleElement> roleElements;
         private Context context;
 
-        public RoleRecyclerAdapter(ArrayList<NewRoleElement> roleElements, Context context){
+
+         public RoleRecyclerAdapter(ArrayList<NewRoleElement> roleElements, Context context){
             this.roleElements = roleElements;
             this.context = context;
         }
@@ -329,16 +336,10 @@ public class add_location extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RoleViewHolder holder, int position) {
-            if(!roleArrayList.get(position).getRole().equals(null)) {
-                if (!roleArrayList.get(position).getRepeatCheckBox().equals(null)){
-                    holder.setText(roleArrayList.get(position).getRole());
-                    holder.checked(roleArrayList.get(position).checkBoxValue());
-                } else {
-                    holder.checked(false);
-                }
-            } else {
-               holder.setText("Enter a role.");
-            }
+            //onBindViewHolder(holder, position);
+            NewRoleElement roleElement = roleElements.get(position);
+            holder.setText(roleElement.getRole());
+            holder.checked(roleElement.checkBoxValue());
         }
 
         @Override

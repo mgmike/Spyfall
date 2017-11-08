@@ -8,55 +8,30 @@ import android.widget.EditText;
  */
 
 public class NewRoleElement {
-    private EditText roleInput;
-    private CheckBox repeatCheckBox;
-    private String role; // not sure if im gonna need this
+    private String role;
     private boolean check = false;
 
     public NewRoleElement(){
     }
 
     public NewRoleElement(String role, boolean isRepeat){
+
         this.role = role;
         this.check = isRepeat;
     }
 
-    public void updateViews(){
-        if (roleInput != null) {
-            roleInput.setText(this.role);
-            //} else if(repeatCheckBox != null){
-        }
-            repeatCheckBox.setChecked(check);
+    public void setText(String text){
+        role = text;
     }
 
-    public void setText(String text){
-        roleInput.setText(text);
+    public void setCheckBoxValue(boolean c){
+        check = c;
     }
 
     public boolean checkBoxValue(){
-        return repeatCheckBox.isChecked();
+        return check;
     }
 
-    public String getRole(){
-        if (roleInput.getText() == null){
-            return "Enter a role.";
-        }
-        return String.valueOf(roleInput.getText());
-    }
-
-    public EditText getRoleInput() {
-        return roleInput;
-    }
-
-    public void setRoleInput(EditText roleInput) {
-        this.roleInput = roleInput;
-    }
-
-    public CheckBox getRepeatCheckBox() {
-        return repeatCheckBox;
-    }
-
-    public void setRepeatCheckBox(CheckBox repeatCheckBox) {
-        this.repeatCheckBox = repeatCheckBox;
+    public String getRole(){return role;
     }
 }
