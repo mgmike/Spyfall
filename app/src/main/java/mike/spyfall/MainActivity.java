@@ -3,6 +3,7 @@ package mike.spyfall;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("This is a test device. _-*-_-*-_-*-_-*-_-*-_-*-_-*-_-*-_-*-_");
         }
         */
+
+
         if(getIntent().getExtras() != null){
                 if (getIntent().getIntExtra("kicked", -1) == 1) {
                     Toast.makeText(MainActivity.this, "You were kicked!", Toast.LENGTH_LONG).show();
@@ -178,12 +181,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
-
 
 
     @Override

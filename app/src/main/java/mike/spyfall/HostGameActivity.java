@@ -201,15 +201,6 @@ public class HostGameActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     //Fills a temparary list with the same amount of roles as players
-                                    /*
-                                    String roleList[] = new String[playerCount];
-                                    for (int j = 0; j < playerCount - 1; j++) {
-                                        roleList[j] = dataSnapshot.child("roles").child(Integer.toString(j)).getValue().toString();
-                                    }
-                                    roleList[playerCount - 1] = "Spy";
-                                    */
-                                    //^ temp role assign
-
                                     int rolesCount = (int) dataSnapshot.child("roles").getChildrenCount();
                                     ArrayList<String> roleList = new ArrayList<String>();
                                     if((playerCount - 1) <= rolesCount && playerCount > 0){
