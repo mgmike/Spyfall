@@ -210,7 +210,7 @@
                     android:textSize="20sp"
                     android:textStyle="normal|bold" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/playersList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -224,6 +224,7 @@
 
         </LinearLayout>
 
+        <!--
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="match_parent"
@@ -232,7 +233,7 @@
             android:background="@drawable/my_layout_bg"
             app:adSize="BANNER"
             app:adUnitId="ca-app-pub-7054487445717644/7414353818"></com.google.android.gms.ads.AdView>
-
+-->
     </LinearLayout>
 
 </RelativeLayout>

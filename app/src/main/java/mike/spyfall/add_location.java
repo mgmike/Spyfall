@@ -24,12 +24,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.android.gms.ads.MobileAds;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -51,7 +44,7 @@ public class add_location extends AppCompatActivity {
     private String currentUserName;
     private String currentUID;
 
-    private AdView mAdView;
+    //private AdView mAdView;
     private GridView locationLayout;
     private RecyclerView roleLayout;
     private EditText locationField;
@@ -93,6 +86,8 @@ public class add_location extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
         //Firebase.setAndroidContext(this);
+
+        /*
         MobileAds.initialize(this, "ca-app-pub-7054487445717644~4798964612");
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("145310EF75B6B1FE8013E630E72F45CB").build();
@@ -102,6 +97,7 @@ public class add_location extends AppCompatActivity {
         if(adRequest.isTestDevice(add_location.this)){
             System.out.println("This is a test device. _-*-_-*-_-*-_-*-_-*-_-*-_-*-_-*-_-*-_");
         }
+        */
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

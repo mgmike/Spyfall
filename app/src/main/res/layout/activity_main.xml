@@ -89,6 +89,7 @@
             android:onClick="onFriendsButton"
             android:text="Friends" />
 
+        <!--
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="match_parent"
@@ -96,6 +97,7 @@
             android:layout_weight="5"
             app:adSize="BANNER"
             app:adUnitId="ca-app-pub-7054487445717644/7414353818"></com.google.android.gms.ads.AdView>
+            -->
     </LinearLayout>
 
 

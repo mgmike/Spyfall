@@ -14,8 +14,6 @@ import android.widget.Toast;
 //import com.firebase.ui.Firebase;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentUserName;
     private String currentUID;
     private String currentName;
-    private AdView mAdView;
+    //private AdView mAdView;
 
     public void onFriendsButton(View view){
         toNextActivity(new Intent(MainActivity.this, FriendActivity.class));
@@ -98,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         //Firebase.setAndroidContext(this);
+        /*
         MobileAds.initialize(this, "ca-app-pub-7054487445717644~4798964612");
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("145310EF75B6B1FE8013E630E72F45CB").build();
@@ -107,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         if(adRequest.isTestDevice(MainActivity.this)){
             System.out.println("This is a test device. _-*-_-*-_-*-_-*-_-*-_-*-_-*-_-*-_-*-_");
         }
-
+        */
         if(getIntent().getExtras() != null){
                 if (getIntent().getIntExtra("kicked", -1) == 1) {
                     Toast.makeText(MainActivity.this, "You were kicked!", Toast.LENGTH_LONG).show();

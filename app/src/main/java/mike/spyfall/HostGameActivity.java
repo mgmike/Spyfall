@@ -25,9 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -62,7 +59,7 @@ public class HostGameActivity extends AppCompatActivity {
     private LinearLayout timeChange;
     private TextView roleText;
     private TextView timeText;
-    private AdView mAdView;
+    //private AdView mAdView;
 
     //480000
     private long startTime = 480000;
@@ -377,12 +374,13 @@ public class HostGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_host_game);
+        /*
         MobileAds.initialize(this, "ca-app-pub-7054487445717644~4798964612");
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("145310EF75B6B1FE8013E630E72F45CB").build();
         //AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
+        */
         //sets up the location clickable list
         locationList = (GridView) findViewById(R.id.locationList);
         mRef = FirebaseDatabase.getInstance().getReference();

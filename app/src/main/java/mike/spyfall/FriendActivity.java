@@ -8,15 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +27,7 @@ public class FriendActivity extends AppCompatActivity {
     //private ListView mListView;
     private DatabaseReference mRef;
     private DatabaseReference mRefForRecView;
-    private AutoCompleteTextView friendLookUpView;
+    private EditText friendLookUpView;
     private String currentUserName;
     private String currentUID;
     private String currentName;
@@ -38,7 +35,7 @@ public class FriendActivity extends AppCompatActivity {
     private String friendUserName;
     private String friendUID;
     private String friendName;
-    private AdView mAdView;
+    //private AdView mAdView;
 
     public void onFriendSearch(View view){
         friendUserName = friendLookUpView.getText().toString().toLowerCase();
@@ -131,11 +128,15 @@ public class FriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend2);
+
+        /*
         MobileAds.initialize(this, "ca-app-pub-7054487445717644~4798964612");
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("145310EF75B6B1FE8013E630E72F45CB").build();
         //AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        */
 
         //sets the current name and user id
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -158,7 +159,7 @@ public class FriendActivity extends AppCompatActivity {
                 }
 
 
-                friendLookUpView = (AutoCompleteTextView) findViewById(R.id.userName);
+                friendLookUpView = (EditText) findViewById(R.id.userName);
 
                 mRefForRecView = FirebaseDatabase.getInstance().getReference("users/" + currentUID + "/friends/users");
                 if(currentUserInfoSnapshot.child("friends").exists()) {

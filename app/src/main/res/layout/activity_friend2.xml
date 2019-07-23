@@ -16,29 +16,23 @@
         <LinearLayout
             android:id="@+id/userNameLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
+            android:layout_height="wrap_content"
             android:background="@drawable/my_textinput_bg"
             android:orientation="horizontal">
 
-            <android.support.design.widget.TextInputLayout
+
+            <EditText
+                android:id="@+id/userName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Search for a friend's user name."
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/colorWhite"
                 android:layout_weight="1"
-                android:textColorHint="@color/colorWhite">
+                android:textColorHint="@color/colorWhite" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/userName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Search for a friend's user name."
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/colorWhite"
-                    android:textColorHint="@color/colorWhite" />
-
-            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/FriendSearchButton"
@@ -50,21 +44,22 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/friendsList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:addStatesFromChildren="true" />
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:background="@drawable/my_layout_bg"
-            app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-7054487445717644/7414353818"></com.google.android.gms.ads.AdView>
-
-    </LinearLayout>
-</RelativeLayout>
+        <!--
+                <com.google.android.gms.ads.AdView
+                    android:id="@+id/adView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:background="@drawable/my_layout_bg"
+                    app:adSize="BANNER"
+                    app:adUnitId="ca-app-pub-7054487445717644/7414353818"></com.google.android.gms.ads.AdView>
+        -->
+            </LinearLayout>
+        </RelativeLayout>

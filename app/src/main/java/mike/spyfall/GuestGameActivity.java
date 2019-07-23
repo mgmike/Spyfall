@@ -23,9 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -62,7 +59,7 @@ public class GuestGameActivity extends HostGameActivity{
     private long startTime = 480000;
     private CounterClass timer = new CounterClass(startTime, 1000);
     private int counter = 0;
-    private AdView mAdView;
+    //private AdView mAdView;
 
 
     @Override
@@ -143,11 +140,13 @@ public class GuestGameActivity extends HostGameActivity{
     protected void onCreate(Bundle savedInstanceState) {
         callSuper(savedInstanceState);
         setContentView(R.layout.activity_host_game);
+        /*
         MobileAds.initialize(this, "ca-app-pub-7054487445717644~4798964612");
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("145310EF75B6B1FE8013E630E72F45CB").build();
         //AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+        */
         startGameButton = (Button) findViewById(R.id.startGameButton);
         leaveGameButton = (Button) findViewById(R.id.leaveGameButton);
         addFriendButton = (Button) findViewById(R.id.addFriendButton);
