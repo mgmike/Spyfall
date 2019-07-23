@@ -1,4 +1,4 @@
-package mike.spyfall;
+package mike.spyfall.ItemClasses;
 
 import android.widget.CheckBox;
 import android.widget.EditText;

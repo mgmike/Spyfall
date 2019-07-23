@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import mike.spyfall.ItemClasses.FriendClass;
+
 public class FriendActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     //private ListView mListView;

@@ -1,4 +1,4 @@
-package mike.spyfall;
+package mike.spyfall.ItemClasses;
 
 /**
  * Created by Michael on 2/25/2017.

@@ -1,6 +1,5 @@
 package mike.spyfall;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -32,13 +31,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import mike.spyfall.ItemClasses.CurrentGamePlayerListClass;
+import mike.spyfall.ItemClasses.Location;
 
 public class HostGameActivity extends AppCompatActivity {
 

@@ -1,7 +1,6 @@
 package mike.spyfall;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +32,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+
+import mike.spyfall.ItemClasses.CurrentGamePlayerListClass;
+import mike.spyfall.ItemClasses.Location;
 
 /**
  * Created by Michael on 5/21/2017.
