@@ -3,11 +3,19 @@ package mike.spyfall.ItemClasses
 import java.util.ArrayList
 
 class LocationClass{
-    val location = ""
+    var location = ""
     val roleList = ArrayList<String>()
     val repeatList = ArrayList<String>()
-    val clicked = false
+    var clicked = false
 
     constructor()
+
+    fun addRole(newRole: String){
+        roleList.add(newRole)
+    }
+
+    fun addRepeat(newRepeat: String){
+        repeatList.add(newRepeat)
+    }
 
 }

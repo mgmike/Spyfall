@@ -110,8 +110,34 @@ class DataModel:ModelDataFlowInterface {
         }
     }
 
+    class ListenerForUserInfo(dm: DataModel, variable: () -> Boolean, presenterMethod: String): ChildEventListener{
+        private var dataModel: DataModel
+        private var variable: () -> Boolean
+        init {
+            dataModel = dm
+            this.variable = variable
+        }
+        override fun onCancelled(p0: DatabaseError) {
+
+        }
+
+        override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+        }
+
+        override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+        }
+
+        override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+
+        }
+
+        override fun onChildRemoved(p0: DataSnapshot) {
+        }
+
+    }
+
     class InitialValues(dm: DataModel): ValueEventListener{
-        private lateinit var dataModel: DataModel
+        private var dataModel: DataModel
 
         init {
             dataModel = dm
@@ -148,8 +174,13 @@ class DataModel:ModelDataFlowInterface {
                     dataModel.addPlayer(newPlayer)
                 }
             }
-        }
 
+            Log.d("InitialValues", dataModel.location)
+            Log.d("InitialValues", dataModel.UID)
+            for(i in dataModel.friends) {
+                Log.d("InitialValues", i.userName)
+            }
+        }
     }
 
     class InitialLocations(dm: DataModel): ValueEventListener{
@@ -164,10 +195,17 @@ class DataModel:ModelDataFlowInterface {
         }
 
         override fun onDataChange(p0: DataSnapshot) {
+            var location = LocationClass()
             for(i in p0.children){
+                location.location = i.key.toString()
+                for(roles in i.child("roles").children){
+                    location.roleList.add(roles.value.toString())
+                }
+                for(repeat in i.child("repeats").children){
+                    location.repeatList.add(repeat.value.toString())
+                }
             }
         }
-
 
     }
 }

@@ -121,6 +121,10 @@ public class MainActivity extends AppCompatActivity {
         currentUID = user.getUid();
         mRef = FirebaseDatabase.getInstance().getReference("users/" + currentUID);
 
+        DataModel dataModel = new DataModel();
+        dataModel.updateUID(currentUID);
+        dataModel.setUpInitialVlaues();
+
         mRef.child("userInfo").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
