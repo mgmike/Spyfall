@@ -6,22 +6,21 @@ import mike.spyfall.ItemClasses.LocationClass
 import java.util.*
 
 interface ModelDataFlowInterface {
-    fun signIn()
-    fun signOut()
-    fun updateUID(UID: String)
-    fun updateUserName(userName: String)
-    fun updateName(name: String)
-    fun updateHost(name: String)
-    fun updateEndTime(endTime: Long)
-    fun updateCurrentTime(currentTime: Long)
-    fun updateGameTime(gameTime: Long)
-    fun updateLocation(location: String)
-    fun addFriend(newFriend: FriendClass)
-    fun removeFriend(friend: FriendClass)
-    fun addLocation(newLocation: LocationClass)
-    fun removeLocation(location: LocationClass)
-    fun addPlayer(newPlayer: CurrentGamePlayerListClass)
-    fun removePlayer(player: CurrentGamePlayerListClass)
-    fun removeAllPlayers()
+    fun signIn():Boolean
+    fun signOut():Boolean
+    fun updateUserName(userName: String):Boolean
+    fun updateName(name: String):Boolean
+    fun updateHost(name: String):Boolean
+    fun updateEndTime(endTime: Long):Boolean
+    fun updateCurrentTime(currentTime: Long):Boolean
+    fun updateGameTime(gameTime: Long):Boolean
+    fun updateLocation(location: String):Boolean
+    fun addFriend(newFriend: FriendClass):Boolean
+    fun removeFriend(friend: FriendClass):Boolean
+    fun addLocation(newLocation: LocationClass):Boolean
+    fun removeLocation(location: LocationClass):Boolean
+    fun addPlayer(newPlayer: CurrentGamePlayerListClass):Boolean
+    fun removePlayer(player: CurrentGamePlayerListClass):Boolean
+    fun removeAllPlayers():Boolean
 
 }

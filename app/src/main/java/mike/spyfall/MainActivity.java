@@ -108,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
         }
         */
 
+        oldCode(savedInstanceState);
+    }
+
+    protected void oldCode(Bundle savedInstanceState){
 
         if(getIntent().getExtras() != null){
                 if (getIntent().getIntExtra("kicked", -1) == 1) {
@@ -121,9 +125,8 @@ public class MainActivity extends AppCompatActivity {
         currentUID = user.getUid();
         mRef = FirebaseDatabase.getInstance().getReference("users/" + currentUID);
 
-        DataModel dataModel = new DataModel();
-        dataModel.updateUID(currentUID);
-        dataModel.setUpInitialVlaues();
+        DataModel dataModel = new DataModel(currentUID);
+        dataModel.setUpInitialValues();
 
         mRef.child("userInfo").addValueEventListener(new ValueEventListener() {
             @Override

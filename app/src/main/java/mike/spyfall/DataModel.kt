@@ -2,122 +2,224 @@ package mike.spyfall
 
 import android.renderscript.Sampler
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.database.*
 import mike.spyfall.Interfaces.ModelDataFlowInterface
+import mike.spyfall.Interfaces.PresenterInterface
 import mike.spyfall.ItemClasses.CurrentGamePlayerListClass
 import mike.spyfall.ItemClasses.FriendClass
 import mike.spyfall.ItemClasses.LocationClass
 import java.util.*
 
-class DataModel:ModelDataFlowInterface {
+class DataModel(uID: String):ModelDataFlowInterface {
 
     lateinit var mRef: DatabaseReference
+    lateinit var presenter: PresenterInterface
 
     var userLoggedIn = false
-    var UID = ""
+
+    /**
+     * Will almost always be not empty
+     */
+
+    var UID = uID
     var userName = ""
     var name = ""
-    var location = "none"
+    val friends = ArrayList<FriendClass>()
+    val locations = ArrayList<LocationClass>()
+
+    /**
+     * Can be empty when no games are being played
+     */
+
     var host = ""
+    var location = "none"
     var endTime: Long = -1
     var currentTime: Long = -1
     var gameTime:Long = 480000
-    val friends = ArrayList<FriendClass>()
-    val locations = ArrayList<LocationClass>()
     val players = ArrayList<CurrentGamePlayerListClass>()
 
 
-    override fun signIn() {
+    override fun signIn():Boolean {
         userLoggedIn = true
         //presenter.signedIn()
+        return true
     }
 
-    override fun signOut() {
+    override fun signOut():Boolean {
         userLoggedIn = false
         //presenter.signedOff()
+        return true
     }
 
-    override fun updateUID(UID: String) {
-        this.UID = UID
+    override fun updateUserName(userName: String):Boolean {
+        if(this.userName != userName) {
+            this.userName = userName
+            return true
+        }
+        else
+            return false
     }
 
-    override fun updateUserName(userName: String) {
-        this.userName = userName
+    override fun updateName(name: String):Boolean {
+        if(this.name != name) {
+            this.name = name
+            return true
+        }
+        else
+            return false
     }
 
-    override fun updateName(name: String) {
-        this.name = name
+    override fun updateHost(name: String):Boolean {
+        if(this.host != name) {
+            this.host = name
+            return true
+        }
+        else
+            return false
     }
 
-    override fun updateHost(name: String) {
-        this.host = host
+    override fun updateEndTime(endTime: Long):Boolean {
+        if(this.endTime != endTime) {
+            this.endTime = endTime
+            return true
+        }
+        else
+            return false
     }
 
-    override fun updateEndTime(endTime: Long) {
-        this.endTime = endTime
+    override fun updateCurrentTime(currentTime: Long):Boolean {
+        if(this.currentTime != currentTime) {
+            this.currentTime = currentTime
+            return true
+        }
+        else
+            return false
     }
 
-    override fun updateCurrentTime(currentTime: Long) {
-        this.currentTime = currentTime
+    override fun updateGameTime(gameTime: Long):Boolean {
+        if(this.gameTime != gameTime) {
+            this.gameTime = gameTime
+            return true
+        }
+        else
+            return false
     }
 
-    override fun updateGameTime(gameTime: Long) {
-        this.gameTime = gameTime
+    override fun updateLocation(location: String):Boolean {
+        if(this.location != location) {
+            this.location = location
+            return true
+        }
+        else
+            return false
     }
 
-    override fun updateLocation(location: String) {
-        this.location = location
+    override fun addFriend(newFriend: FriendClass):Boolean {
+        return friends.add(newFriend)
     }
 
-    override fun addFriend(newFriend: FriendClass) {
-        friends.add(newFriend)
-    }
-
-    override fun removeFriend(friend: FriendClass) {
+    override fun removeFriend(friend: FriendClass):Boolean {
         if(friends.contains(friend))
-            friends.remove(friend)
+            return friends.remove(friend)
+        else
+            return false
     }
 
-    override fun addLocation(newLocation: LocationClass) {
-        locations.add(newLocation)
+    override fun addLocation(newLocation: LocationClass):Boolean {
+        return locations.add(newLocation)
     }
 
-    override fun removeLocation(location: LocationClass) {
+    override fun removeLocation(location: LocationClass):Boolean {
         if(locations.contains(location))
-            locations.remove(location)
+            return locations.remove(location)
+        else
+            return false
     }
 
-    override fun addPlayer(newPlayer: CurrentGamePlayerListClass) {
-        players.add(newPlayer)
+    override fun addPlayer(newPlayer: CurrentGamePlayerListClass):Boolean {
+        return players.add(newPlayer)
     }
 
-    override fun removePlayer(player: CurrentGamePlayerListClass){
+    override fun removePlayer(player: CurrentGamePlayerListClass):Boolean {
         if(players.contains(player))
-            players.remove(player)
+            return players.remove(player)
+        else
+            return false
     }
 
-    override fun removeAllPlayers(){
-        players.removeAll(players)
+    override fun removeAllPlayers():Boolean {
+        return players.removeAll(players)
     }
 
 
-    fun setUpInitialVlaues(){
+    fun setUpInitialValues(){
         if(UID != ""){
+            mRef = FirebaseDatabase.getInstance().getReference("users/" + UID + "/userInfo")
+            mRef.addChildEventListener(ListenerForUserInfo(this))
+            mRef = FirebaseDatabase.getInstance().getReference("users/" + UID + "/currentGame")
+            mRef.addChildEventListener(ListenerForCurrentGameInfo(this))
+            mRef = FirebaseDatabase.getInstance().getReference("users/" + UID + "/friends/users")
+            mRef.addChildEventListener(ListenerForFriends(this))
+            mRef = FirebaseDatabase.getInstance().getReference("users/" + UID + "/currentGame/users")
+            mRef.addChildEventListener(ListenerForPlayers(this))
+
             mRef = FirebaseDatabase.getInstance().getReference("users/" + UID)
             mRef.addListenerForSingleValueEvent(InitialValues(this))
+            mRef = FirebaseDatabase.getInstance().getReference("users/" + UID + "/currentGame")
+            mRef.addListenerForSingleValueEvent(InitialGameInfo(this))
             mRef = FirebaseDatabase.getInstance().getReference("defaultLocations")
             mRef.addListenerForSingleValueEvent(InitialLocations(this))
         }
     }
 
-    class ListenerForUserInfo(dm: DataModel, variable: () -> Boolean, presenterMethod: String): ChildEventListener{
-        private var dataModel: DataModel
-        private var variable: () -> Boolean
-        init {
-            dataModel = dm
-            this.variable = variable
-        }
+
+    class ListenerForCurrentGameInfo(dm: DataModel): ChildEventListener{
+        private var dataModel: DataModel = dm
+
         override fun onCancelled(p0: DatabaseError) {
+            Log.e("ListenerForCurrentGameInfo", p0.message + " - " + p0.details)
+        }
+
+        override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+        }
+
+        override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+            when (p0.key){
+                "endTime" -> dataModel.updateEndTime(p0.value.toString().toLong())
+                "startTime" -> dataModel.updateGameTime(p0.value.toString().toLong())
+                "location" -> dataModel.updateLocation(p0.value.toString())
+                "host" -> dataModel.updateHost(p0.value.toString())
+            }
+            Log.d("CurrentGameInfo", p0.key.toString() + " modified")
+        }
+
+        override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+            when (p0.key){
+                "endTime" -> dataModel.updateEndTime(p0.value.toString().toLong())
+                "startTime" -> dataModel.updateGameTime(p0.value.toString().toLong())
+                "location" -> dataModel.updateLocation(p0.value.toString())
+                "host" -> dataModel.updateHost(p0.value.toString())
+            }
+            Log.d("CurrentGameInfo", p0.key.toString() + " added")
+        }
+
+        override fun onChildRemoved(p0: DataSnapshot) {
+            when (p0.key){
+                "endTime" -> dataModel.updateEndTime(-1)
+                "startTime" -> dataModel.updateGameTime(-1)
+                "location" -> dataModel.updateLocation("")
+                "host" -> dataModel.updateHost("")
+            }
+            Log.d("CurrentGameInfo", p0.key.toString() + " removed")
+        }
+    }
+
+    class ListenerForPlayers(dm: DataModel): ChildEventListener{
+        private var dataModel: DataModel = dm
+
+        override fun onCancelled(p0: DatabaseError) {
+            Log.e("ListenerForPlayers", p0.message + " - " + p0.details)
 
         }
 
@@ -125,32 +227,114 @@ class DataModel:ModelDataFlowInterface {
         }
 
         override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+            for(i in dataModel.players){
+                if(p0.value.toString() == i.userName){
+                    i.role = p0.child("role").value.toString()
+                }
+            }
         }
 
         override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+            var newPlayer: CurrentGamePlayerListClass = CurrentGamePlayerListClass(p0.key!!)
+            newPlayer.role = ""
+            dataModel.addPlayer(newPlayer)
+            Log.d("PlayerListener", p0.key.toString() + " added")
 
         }
 
         override fun onChildRemoved(p0: DataSnapshot) {
+            var un = p0.key
+            for(i in dataModel.friends.filter( {n -> n.userName == p0.key})){
+                dataModel.removeFriend(i)
+            }
+        }
+    }
+
+    class ListenerForFriends(dm: DataModel): ChildEventListener{
+        private var dataModel: DataModel = dm
+
+        override fun onCancelled(p0: DatabaseError) {
+            Log.e("ListenerForFriends", p0.message + " - " + p0.details)
+        }
+
+        override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+
+        }
+
+        override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+            for(i in dataModel.friends){
+                if(p0.value.toString() == i.userName){
+                    i.from = p0.child("from").value.toString().toBoolean()
+                    i.requestAccepted = p0.child("requestAccpeted").value.toString().toBoolean()
+                }
+            }
+        }
+
+        override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+            var newFriend: FriendClass = FriendClass()
+            newFriend.userName = p0.key
+            newFriend.from = p0.child("from").value.toString().toBoolean()
+            newFriend.requestAccepted = p0.child("requestAccepted").value.toString().toBoolean()
+            dataModel.addFriend(newFriend)
+        }
+
+        override fun onChildRemoved(p0: DataSnapshot) {
+            for(i in dataModel.friends.filter( {n -> n.userName == p0.key})){
+                dataModel.removeFriend(i)
+            }
+
+        }
+
+    }
+
+    class ListenerForUserInfo(dm: DataModel): ChildEventListener{
+        private var dataModel: DataModel = dm
+
+        override fun onCancelled(p0: DatabaseError) {
+            Log.e("ListenerForUserInfo", p0.message + " - " + p0.details)
+
+        }
+
+        override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+        }
+
+        override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+            when(p0.key){
+                "inGame" -> dataModel.updateHost(p0.value.toString())
+                "name" -> dataModel.updateName(p0.value.toString())
+                "userName" -> dataModel.updateUserName(p0.value.toString())
+            }
+            Log.d("UserInfoListener", p0.value.toString())
+        }
+
+        override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+            when(p0.key){
+                "inGame" -> dataModel.updateHost(p0.value.toString())
+            }
+        }
+
+        override fun onChildRemoved(p0: DataSnapshot) {
+
+            when(p0.key){
+                "inGame" -> dataModel.updateHost("")
+            }
         }
 
     }
 
     class InitialValues(dm: DataModel): ValueEventListener{
-        private var dataModel: DataModel
-
-        init {
-            dataModel = dm
-        }
+        private var dataModel: DataModel = dm
 
         override fun onCancelled(p0: DatabaseError) {
+            Log.e("InitialValues", p0.message + " - " + p0.details)
+
         }
 
         override fun onDataChange(p0: DataSnapshot) {
             if(p0.hasChild("userName"))
                 dataModel.updateUserName(p0.child("userName").value.toString())
             if(p0.hasChild("name"))
-                dataModel.updateUserName(p0.child("name").value.toString())
+                dataModel.updateName(p0.child("name").value.toString())
             if(p0.hasChild("friends")){
                 for(i in p0.child("friends").child("users").children){
                     var newFriend = FriendClass()
@@ -168,8 +352,7 @@ class DataModel:ModelDataFlowInterface {
                 if(p0.child("currentGame").hasChild("startTime"))
                     dataModel.updateGameTime(p0.child("currentGame").child("startTime").value.toString().toLong())
                 for(i in p0.child("currentGame").child("users").children){
-                    var newPlayer = CurrentGamePlayerListClass()
-                    newPlayer.userName = i.key
+                    var newPlayer = CurrentGamePlayerListClass(i.key!!)
                     newPlayer.role = i.child("role").value.toString()
                     dataModel.addPlayer(newPlayer)
                 }
@@ -183,15 +366,38 @@ class DataModel:ModelDataFlowInterface {
         }
     }
 
-    class InitialLocations(dm: DataModel): ValueEventListener{
-        private lateinit var dataModel: DataModel
-
-        init {
-            dataModel = dm
-        }
+    class InitialGameInfo(dm: DataModel): ValueEventListener{
+        private var dataModel: DataModel = dm
 
         override fun onCancelled(p0: DatabaseError) {
-            Log.e("InitialLocations", p0.message)
+            Log.e("InitialGameInfo", p0.message + " - " + p0.details)
+        }
+
+        override fun onDataChange(p0: DataSnapshot) {
+            if(p0.hasChild("endTime"))
+                dataModel.updateEndTime(p0.child("endTime").value.toString().toLong())
+            if(p0.hasChild("startTime"))
+                dataModel.updateGameTime(p0.child("startTime").value.toString().toLong())
+            if(p0.hasChild("location"))
+                dataModel.updateLocation(p0.child("location").value.toString())
+            if(p0.hasChild("host"))
+                dataModel.updateHost(p0.child("host").value.toString())
+
+            if(p0.hasChild("users")){
+                for (i in p0.child("users").children){
+                    var newPlayer = CurrentGamePlayerListClass(i.key!!)
+                    if(i.hasChild("role"))
+                        newPlayer.role = i.child("role").value.toString()
+                }
+            }
+        }
+    }
+
+    class InitialLocations(dm: DataModel): ValueEventListener{
+        private var dataModel: DataModel = dm
+
+        override fun onCancelled(p0: DatabaseError) {
+            Log.e("InitialLocations", p0.message + " - " + p0.details)
         }
 
         override fun onDataChange(p0: DataSnapshot) {
