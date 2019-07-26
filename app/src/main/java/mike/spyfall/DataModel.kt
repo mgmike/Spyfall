@@ -11,10 +11,9 @@ import mike.spyfall.ItemClasses.FriendClass
 import mike.spyfall.ItemClasses.LocationClass
 import java.util.*
 
-class DataModel(uID: String):ModelDataFlowInterface {
+class DataModel(val UID: String, val presenter: PresenterInterface):ModelDataFlowInterface {
 
     lateinit var mRef: DatabaseReference
-    lateinit var presenter: PresenterInterface
 
     var userLoggedIn = false
 
@@ -22,7 +21,6 @@ class DataModel(uID: String):ModelDataFlowInterface {
      * Will almost always be not empty
      */
 
-    var UID = uID
     var userName = ""
     var name = ""
     val friends = ArrayList<FriendClass>()
